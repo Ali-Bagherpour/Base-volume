@@ -6,7 +6,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
     // آدرس Worker شما (باید بعد از دیپلوی اینجا قرار بگیرد)
     // اگر فرانت و ورکر روی یک دامنه باشند، از آدرس نسبی استفاده می‌کنیم
-    const API_URL = 'https://basevolume-backend.alibagherpour-sadafi.workers.dev/'; 
+    const API_URL = 'https://groovy-backend.alibagherpour-sadafi.workers.dev'; 
 
     let musicDatabase = [];
     let artistDatabase = [];
