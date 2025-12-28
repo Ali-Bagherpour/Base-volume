@@ -1,5 +1,6 @@
 /**
  * Groovy Music - نسخه بهینه‌سازی شده برای موبایل و دیتابیس D1
+ * ساختار جدید: صفحات فرعی در پوشه pages قرار دارند
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -10,6 +11,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     let currentPlaylist = [];
     let currentSongIndex = 0;
     let isPlaying = false;
+
+    // تشخیص اینکه آیا در پوشه pages هستیم یا روت اصلی
+    const isInPagesFolder = window.location.pathname.includes('/pages/');
 
     // انتخابگرهای DOM
     const audio = document.getElementById('audio-player');
@@ -99,6 +103,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="text-[10px] text-gray-500">${artist.followers || '1.2M'} پخش</div>
                 </div>
             `;
+            
+            // کلیک روی هنرمند در صفحه اصلی
+            div.addEventListener('click', () => {
+                localStorage.setItem('groovyFilterArtist', artist.name);
+                const targetUrl = isInPagesFolder ? 'index.html' : 'index.html'; // در اینجا هر دو به ریشه یا صفحه اصلی اشاره دارند اما در ساختار پوشه‌بندی مدیریت می‌شود
+                window.location.href = isInPagesFolder ? '../index.html' : 'index.html';
+            });
+
             topArtistsContainer.appendChild(div);
         });
     }
@@ -126,16 +138,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     function playSong() {
         isPlaying = true;
         audio.play();
-        playIcon.classList.add('hidden');
-        pauseIcon.classList.remove('hidden');
+        if (playIcon) playIcon.classList.add('hidden');
+        if (pauseIcon) pauseIcon.classList.remove('hidden');
     }
 
     function togglePlayPause() {
         if (isPlaying) {
             isPlaying = false;
             audio.pause();
-            playIcon.classList.remove('hidden');
-            pauseIcon.classList.add('hidden');
+            if (playIcon) playIcon.classList.remove('hidden');
+            if (pauseIcon) pauseIcon.classList.add('hidden');
         } else {
             playSong();
         }
@@ -145,7 +157,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ۴. نهایی‌سازی
     // =================================================================
     function initializeUI() {
-        renderTopCharts(musicDatabase);
+        // مدیریت فیلتر هنرمند در بدو ورود به صفحه اصلی
+        const filterArtist = localStorage.getItem('groovyFilterArtist');
+        if (!isInPagesFolder && filterArtist) {
+            const filteredSongs = musicDatabase.filter(s => s.artist === filterArtist);
+            renderTopCharts(filteredSongs);
+            const chartsSubtitle = document.getElementById('charts-subtitle');
+            if(chartsSubtitle) chartsSubtitle.textContent = `نمایش آهنگ‌های ${filterArtist}`;
+            localStorage.removeItem('groovyFilterArtist');
+        } else {
+            renderTopCharts(musicDatabase);
+        }
+
         renderTopArtists();
         if(musicDatabase.length > 0) loadSong(0);
 
