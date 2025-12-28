@@ -10,6 +10,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let musicDatabase = [];
     let artistDatabase = [];
+    let searchTimeout = null;
+    let currentSongIndex = 0;
+    let isPlaying = false;
+    let currentPlaylist = [];
+    
+    // انتخابگرهای اصلی
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+    const chartsSubtitle = document.getElementById('charts-subtitle');
+    const RECENTS_KEY = 'groovyRecentSongs';
+    const FAVOURITES_KEY = 'groovyFavouriteSongs';
+    const FILTER_ARTIST_KEY = 'groovyFilterArtist';
+    const audio = document.getElementById('audio-player');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const topChartsList = document.getElementById('top-charts-list');
 
     // =================================================================
     // دریافت داده‌ها از سرور
@@ -31,9 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // =================================================================
     // تنظیمات کش و دیتابیس محلی (LocalStorage)
     // =================================================================
-    const RECENTS_KEY = 'groovyRecentSongs';
-    const FAVOURITES_KEY = 'groovyFavouriteSongs';
-    const FILTER_ARTIST_KEY = 'groovyFilterArtist';
+    
 
     function addSongToRecents(song) {
         if (!song || !song.src) return;
@@ -62,13 +75,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // =================================================================
     // متغیرهای پخش‌کننده و انتخابگرها
     // =================================================================
-    let currentSongIndex = 0;
-    let isPlaying = false;
-    let currentPlaylist = [];
+    
 
-    const audio = document.getElementById('audio-player');
-    const playPauseBtn = document.getElementById('play-pause-btn');
-    const topChartsList = document.getElementById('top-charts-list');
     // ... سایر انتخابگرها (مشابه نسخه قبل)
 
     // =================================================================
@@ -105,6 +113,113 @@ document.addEventListener('DOMContentLoaded', async () => {
             topChartsList.appendChild(songItem);
         });
     }
+
+
+    // =================================================================
+    // دریافت داده‌های اولیه
+    // =================================================================
+    async function fetchData() {
+        try {
+            const response = await fetch(`${API_URL}/all`);
+            const data = await response.json();
+            musicDatabase = data.songs || [];
+            artistDatabase = data.artists || [];
+            initializeUI();
+        } catch (error) {
+            console.error("خطا در دریافت داده‌ها:", error);
+        }
+    }
+
+    // =================================================================
+    // بخش جست‌وجوی زنده (Live Search)
+    // =================================================================
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim();
+            
+            // پاک کردن تایمر قبلی (Debounce)
+            clearTimeout(searchTimeout);
+
+            if (query.length < 2) {
+                if (searchResults) searchResults.classList.add('hidden');
+                return;
+            }
+
+            // ایجاد تایمر جدید برای ارسال درخواست بعد از ۳۰۰ میلی‌ثانیه توقف تایپ
+            searchTimeout = setTimeout(async () => {
+                await performLiveSearch(query);
+            }, 300);
+        });
+    }
+
+    async function performLiveSearch(query) {
+        try {
+            const res = await fetch(`${API_URL}/search?q=${encodeURIComponent(query)}`);
+            const data = await res.json();
+            renderSearchResults(data.artists, data.songs);
+        } catch (error) {
+            console.error("خطا در جست‌وجو:", error);
+        }
+    }
+
+    function renderSearchResults(artists, songs) {
+        if (!searchResults) return;
+        searchResults.innerHTML = '';
+        
+        if (artists.length === 0 && songs.length === 0) {
+            searchResults.innerHTML = `<div class="p-4 text-sm text-gray-400">نتیجه‌ای یافت نشد.</div>`;
+            searchResults.classList.remove('hidden');
+            return;
+        }
+
+        // نمایش هنرمندان در نتایج
+        artists.forEach(artist => {
+            const div = document.createElement('div');
+            div.className = "flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-700 transition-colors";
+            div.innerHTML = `
+                <img src="${artist.image}" class="w-10 h-10 rounded-full object-cover">
+                <div>
+                    <div class="font-semibold text-white text-sm">${artist.name}</div>
+                    <div class="text-xs text-gray-500">هنرمند</div>
+                </div>
+            `;
+            div.addEventListener('click', () => {
+                filterByArtist(artist.name);
+                searchResults.classList.add('hidden');
+                searchInput.value = '';
+            });
+            searchResults.appendChild(div);
+        });
+
+        // نمایش آهنگ‌ها در نتایج
+        songs.forEach(song => {
+            const div = document.createElement('div');
+            div.className = "flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-700 transition-colors";
+            div.innerHTML = `
+                <img src="${song.cover}" class="w-10 h-10 rounded object-cover">
+                <div>
+                    <div class="font-semibold text-white text-sm">${song.title}</div>
+                    <div class="text-xs text-gray-500">${song.artist}</div>
+                </div>
+            `;
+            div.addEventListener('click', () => {
+                playSpecificSong(song);
+                searchResults.classList.add('hidden');
+                searchInput.value = '';
+            });
+            searchResults.appendChild(div);
+        });
+
+        searchResults.classList.remove('hidden');
+    }
+
+    // بستن نتایج با کلیک به بیرون
+    document.addEventListener('click', (e) => {
+        if (searchResults && !searchResults.contains(e.target) && e.target !== searchInput) {
+            searchResults.classList.add('hidden');
+        }
+    });
 
     // تابع اصلی برای راه‌اندازی منطق پخش‌کننده (بخش‌های تکراری از نسخه قبل حذف شده تا حجم کم شود)
     function initializePlayer() {
