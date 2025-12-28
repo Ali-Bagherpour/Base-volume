@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groovy - Explore Music</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        gray: {
+                            900: '#121212',
+                            950: '#0A0A0A',
+                            800: '#181818',
+                            700: '#282828',
+                            600: '#3E3E3E',
+                            500: '#535353',
+                            400: '#B3B3B3',
+                            300: '#E0E0E0',
+                        },
+                        blue: {
+                            600: '#2D76F6',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A0A0A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3E3E3E;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #535353;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-300 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Left Sidebar (Hidden on mobile, visible on lg+) -->
+        <aside class="w-64 bg-gray-950 p-6 hidden lg:flex flex-col flex-shrink-0 overflow-y-auto">
+            <div class="flex items-center gap-2 mb-8">
+                <!-- SVG for Groovy Logo -->
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="16" cy="16" r="16" fill="url(#logo-gradient)"/>
+                    <path d="M11.5 22.1818V9.81818C11.5 9.39773 11.9167 9.13636 12.2917 9.31818L22.2083 15.5C22.5833 15.6818 22.5833 16.3182 22.2083 16.5L12.2917 22.6818C11.9167 22.8636 11.5 22.6023 11.5 22.1818Z" fill="white"/>
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#4F46E5"/>
+                            <stop offset="1" stop-color="#2D76F6"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="font-bold text-xl text-white">Groovy</span>
+            </div>
+
+            <!-- Navigation Sections -->
+            <nav class="space-y-6">
+                <!-- MENU -->
+                <div>
+                    <h3 class="text-xs text-gray-500 uppercase font-semibold tracking-wider mb-3">Menu</h3>
+                    <ul class="space-y-1">
+                        <li>
+                            <!-- Active Page Link -->
+                            <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-md text-white bg-gray-700 font-medium">
+                                <!-- Lucide Icon: Compass (Explore) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                                <span>Explore</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="genres.html" class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 font-medium">
+                                <!-- Lucide Icon: LayoutGrid (Genres) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+                                <span>Genres</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="albums.html" class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 font-medium">
+                                <!-- Lucide Icon: Disc (Albums) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                                <span>Albums</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="artists.html" class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 font-medium">
+                                <!-- Lucide Icon: Mic2 (Artists) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                                <span>Artists</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="radio.html" class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 font-medium">
+                                <!-- Lucide Icon: Radio -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2C5 13.4 5 8.6 7.8 5.8"/><circle cx="12" cy="12" r="2"/><path d="M16.2 16.2C19 13.4 19 8.6 16.2 5.8"/><path d="M19.1 19.1C23 15.2 23 8.8 19.1 4.9"/></svg>
+                                <span>Radio</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- LIBRARY -->
+                <div>
+                    <h3 class="text-xs text-gray-500 uppercase font-semibold tracking-wider mb-3">Library</h3>
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="recent.html" class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 font-medium">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                <span>Recent</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="favourites.html" class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 font-medium">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                <span>Favourites</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 font-medium">
+                                <!-- Lucide Icon: Folder (Local) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z"/></svg>
+                                <span>Local</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- PLAYLIST -->
+                <div>
+                    <h3 class="text-xs text-gray-500 uppercase font-semibold tracking-wider mb-3">Playlist</h3>
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 font-medium">
+                                <!-- Lucide Icon: PlusCircle (Create New) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                                <span>Create New</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 font-medium">
+                                <!-- Lucide Icon: Music (Playlist) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                                <span>Design Flow</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 font-medium">
+                                <!-- Lucide Icon: ListMusic (Playlist) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v-1a2 2 0 0 0-2-2h-2v-1a2 2 0 0 0-2-2H3"/><path d="M21 15v1a2 2 0 0 1-2 2H3"/><path d="M3 11h11v-1a2 2 0 0 0-2-2H3"/><path d="m3 19 2-2"/><path d="m15 13-2-2"/><path d="M12 11V3l4 4"/></svg>
+                                <span>Best of 2020</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Device Link -->
+            <div class="mt-auto">
+                <a href="#" class="flex items-center gap-3 p-3 rounded-md bg-gray-800 hover:bg-gray-700">
+                    <!-- Lucide Icon: Smartphone -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+                    <div class="flex-1">
+                        <span class="text-sm font-medium text-white block">Google Homepod</span>
+                        <span class="text-xs text-gray-400 block">Music on device</span>
+                    </div>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            
+            <!-- Top Bar -->
+            <header class="bg-gray-900 border-b border-gray-800 p-4 flex-shrink-0">
+                <div class="flex items-center justify-between">
+                    <!-- Left: Mobile Menu (placeholder) & Nav -->
+                    <div class="flex items-center gap-6">
+                        <!-- Mobile Menu Button (placeholder) -->
+                        <button class="lg:hidden text-gray-400 hover:text-white">
+                            <!-- Lucide Icon: Menu -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </button>
+                        <!-- Top Nav -->
+                        <nav class="hidden md:flex items-center gap-4">
+                            <a href="#" class="text-sm font-semibold text-white">MUSIC</a>
+                            <a href="#" class="text-sm font-semibold text-gray-400 hover:text-white">PODCAST</a>
+                            <a href="#" class="text-sm font-semibold text-gray-400 hover:text-white">LIVE</a>
+                        </nav>
+                    </div>
+
+                    <!-- Center: Search Bar -->
+                    <div class="flex-1 max-w-xs mx-4">
+                        <div class="relative" id="search-container">
+                            <!-- Search Input -->
+                            <input type="text" placeholder="Type here to search" id="search-input" class="w-full bg-gray-800 border border-gray-700 rounded-full px-4 py-2 pl-10 text-sm text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-600">
+                            <!-- Lucide Icon: Search -->
+                            <div class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            </div>
+
+                            <!-- Search Results Dropdown -->
+                            <div id="search-results" class="absolute z-50 w-full top-12 max-h-96 overflow-y-auto bg-gray-800 rounded-lg shadow-lg hidden border border-gray-700">
+                                <!-- Results will be injected here by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: User Profile -->
+                    <div class="flex items-center gap-3">
+                        <button class="text-gray-400 hover:text-white">
+                            <!-- Lucide Icon: Bell -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        </button>
+                        <button class="flex items-center gap-2 bg-gray-800 p-1 rounded-full hover:bg-gray-700">
+                            <img src="https://placehold.co/32x32/181818/E0E0E0?text=DC" alt="Dave Cooper" class="w-8 h-8 rounded-full">
+                            <span class="text-sm font-medium text-white hidden md:block mr-2">Dave Cooper</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area (Scrollable) -->
+            <div class="flex-1 flex overflow-hidden">
+                
+                <!-- Main Content (Scrollable) -->
+                <main class="flex-1 overflow-y-auto p-6">
+                    
+                    <!-- Hero Section -->
+                    <section class="mb-8">
+                        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-lg p-8 flex flex-col md:flex-row items-center justify-between">
+                            <div class="md:w-1/2 text-white mb-6 md:mb-0">
+                                <span class="text-sm font-semibold uppercase tracking-wider">Trending New Hits</span>
+                                <h2 class="text-5xl font-bold my-3" id="hero-title">Zeze</h2>
+                                <p class="text-xl font-medium mb-2" id="hero-artist">Afra</p>
+                                <p class="text-base text-indigo-200 mb-6">63 Million Plays</p>
+                                <button id="listen-now-btn" class="bg-white text-blue-600 font-bold py-3 px-6 rounded-full flex items-center gap-2 hover:bg-gray-200">
+                                    <!-- Lucide Icon: Play -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                    Listen Now
+                                </button>
+                            </div>
+                            <div class="md:w-1/2 flex justify-center md:justify-end">
+                                <img src="image_4385c5.png" alt="Zeze" id="hero-image" class="w-64 h-64 rounded-lg object-cover shadow-2xl">
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Top Artists -->
+                    <section class="mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-2xl font-bold text-white">Top Artists</h2>
+                            <a href="#" class="text-sm font-medium text-gray-400 hover:text-white">See all</a>
+                        </div>
+                        <div class="flex gap-6 overflow-x-auto pb-4" id="top-artists-container">
+                            <!-- Artist cards will be injected by JavaScript -->
+                        </div>
+                    </section>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Genres -->
+                        <section>
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-2xl font-bold text-white">Genres</h2>
+                                <a href="genres.html" class="text-sm font-medium text-gray-400 hover:text-white">See all</a>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <a href="genres.html" class="bg-blue-600 rounded-lg p-4 font-bold text-white h-24 flex items-center justify-center text-lg hover:bg-blue-500">Pop</a>
+                                <a href="genres.html" class="bg-red-600 rounded-lg p-4 font-bold text-white h-24 flex items-center justify-center text-lg hover:bg-red-500">Hip Hop</a>
+                                <a href="genres.html" class="bg-yellow-600 rounded-lg p-4 font-bold text-white h-24 flex items-center justify-center text-lg hover:bg-yellow-500">Indie</a>
+                                <a href="genres.html" class="bg-green-600 rounded-lg p-4 font-bold text-white h-24 flex items-center justify-center text-lg hover:bg-green-500">Rock</a>
+                            </div>
+                        </section>
+
+                        <!-- Top Charts -->
+                        <section>
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-2xl font-bold text-white">Top Charts</h2>
+                                <a href="#" id="see-all-charts" class="text-sm font-medium text-gray-400 hover:text-white">See all</a>
+                            </div>
+                            <p class="text-sm text-gray-400 mb-4" id="charts-subtitle">Showing all music</p>
+                            <ul class="space-y-2" id="top-charts-list">
+                                <!-- Song list items will be injected by JavaScript -->
+                            </ul>
+                        </section>
+                    </div>
+
+                </main>
+
+                <!-- Right Sidebar (Player) - Hidden on mobile/tablet, visible on xl+ -->
+                <aside class="w-72 bg-gray-950 p-6 hidden xl:flex flex-col flex-shrink-0 overflow-y-auto">
+                    <h2 class="text-2xl font-bold text-white mb-6">Player</h2>
+                    
+                    <div class="flex-1 flex flex-col items-center">
+                        <img src="image_4385c5.png" alt="Zeze" class="w-full aspect-square rounded-lg mb-4 object-cover shadow-lg" id="player-cover-art">
+                        <h3 class="font-semibold text-xl text-white text-center" id="player-title">Zeze</h3>
+                        <p class="text-gray-400 text-sm text-center" id="player-artist">Afra</p>
+                        <p class="text-gray-500 text-xs text-center mb-6">Groovy Player</p>
+
+                        <!-- Progress Bar -->
+                        <div class="w-full mb-4 cursor-pointer" id="progress-container">
+                            <div class="bg-gray-700 rounded-full h-1.5">
+                                <div class="bg-blue-600 h-1.5 rounded-full" id="progress-bar" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                <span id="current-time">0:00</span>
+                                <span id="total-duration">--:--</span>
+                            </div>
+                        </div>
+
+                        <!-- Player Controls -->
+                        <div class="flex items-center justify-center gap-6 w-full mb-6">
+                            <button class="text-gray-400 hover:text-white" id="shuffle-btn">
+                                <!-- Lucide Icon: Shuffle -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="16 21 21 21 21 16"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+                            </button>
+                            <button class="text-gray-400 hover:text-white" id="prev-btn">
+                                <!-- Lucide Icon: SkipBack -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+                            </button>
+                            <button class="bg-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:bg-blue-500" id="play-pause-btn">
+                                <span id="play-pause-icon-container">
+                                    <!-- Lucide Icon: Play (filled) -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="play-icon"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                    <!-- Pause Icon (example) -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="pause-icon" class="hidden"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                                </span>
+                            </button>
+                            <button class="text-gray-400 hover:text-white" id="next-btn">
+                                <!-- Lucide Icon: SkipForward -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+                            </button>
+                            <button class="text-gray-400 hover:text-white" id="repeat-btn">
+                                <!-- Lucide Icon: Repeat -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2.1l4 4-4 4"/><path d="M3 12.6V12A9 9 0 0 1 12 3h9"/><path d="M7 21.9l-4-4 4-4"/><path d="M21 11.4V12A9 9 0 0 1 12 21H3"/></svg>
+                            </button>
+                        </div>
+                        
+                        <!-- Lyrics Button -->
+                        <button class="w-full bg-gray-800 text-gray-300 font-medium py-3 px-4 rounded-full flex items-center justify-center gap-2 hover:bg-gray-700">
+                            <!-- Lucide Icon: AlignLeft (Lyrics) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="3" y2="18"/></svg>
+                            <span>Lyrics</span>
+                        </button>
+                    </div>
+                </aside>
+            </div>
+
+            <!-- Mobile Player Bar (Placeholder) - Hidden on lg+ -->
+            <div class="lg:hidden flex-shrink-0 bg-gray-950 border-t border-gray-800 p-3 flex items-center gap-3">
+                <img src="image_4385c5.png" alt="Album Art" class="w-10 h-10 rounded-md" id="mobile-cover-art">
+                <div class="flex-1">
+                    <h4 class="font-semibold text-white text-sm" id="mobile-title">Zeze</h4>
+                    <p class="text-xs text-gray-400" id="mobile-artist">Afra</p>
+                </div>
+                <button class="text-white" id="mobile-play-btn">
+                    <span id="mobile-play-icon-container">
+                        <!-- Lucide Icon: Play -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="mobile-play-icon"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        <!-- Lucide Icon: Pause -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="mobile-pause-icon" class="hidden"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                    </span>
+                </button>
+                <button class="text-gray-400 hover:text-white" id="mobile-next-btn">
+                    <!-- Lucide Icon: SkipForward -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HTML5 Audio Player -->
+    <audio id="audio-player"></audio>
+
+    <script src="app.js" defer></script>
+
+</body>
+</html>
