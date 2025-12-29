@@ -491,13 +491,19 @@
 
             async function fetchData() {
                 try {
+                    // Attempt to fetch from API
                     const res = await fetch(`${cleanBaseUrl}/all`);
                     const data = await res.json();
+                    
                     musicDatabase = data.songs || [];
                     artistDatabase = data.artists || [];
                     initializeUI();
+                    console.log("Loaded data from API successfully");
                 } catch (err) {
                     console.error('Fetch error:', err);
+                    if (topChartsList) {
+                        topChartsList.innerHTML = '<li class="p-4 text-center text-red-400">Error connecting to server. Please try again later.</li>';
+                    }
                 }
             }
 
