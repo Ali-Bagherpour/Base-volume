@@ -29,12 +29,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const closeSidebarBtn = document.getElementById('close-sidebar');
 
     // پلیر
+    const playerBar = document.getElementById('player-bar');
     const playPauseBtn = document.getElementById('play-pause-btn');
     const mobilePlayBtn = document.getElementById('mobile-play-pause-btn');
     const playIcon = document.getElementById('play-icon');
     const pauseIcon = document.getElementById('pause-icon');
     const progressBar = document.getElementById('progress-bar');
     const mobileProgressBar = document.getElementById('mobile-progress-bar');
+    const progressContainer = document.getElementById('progress-container');
 
     // =================================================================
     // ۱. مدیریت رابط کاربری (Mobile Sidebar)
@@ -104,10 +106,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
             `;
             
-            // کلیک روی هنرمند در صفحه اصلی
             div.addEventListener('click', () => {
                 localStorage.setItem('groovyFilterArtist', artist.name);
-                const targetUrl = isInPagesFolder ? 'index.html' : 'index.html'; // در اینجا هر دو به ریشه یا صفحه اصلی اشاره دارند اما در ساختار پوشه‌بندی مدیریت می‌شود
                 window.location.href = isInPagesFolder ? '../index.html' : 'index.html';
             });
 
@@ -121,12 +121,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     function loadSong(index) {
         const song = currentPlaylist[index];
         if (!song) return;
+        
+        // Show the player bar when a song is loaded
+        if (playerBar) {
+            playerBar.classList.add('active');
+            playerBar.style.visibility = 'visible';
+            playerBar.style.opacity = '1';
+        }
+
         audio.src = song.src;
         document.getElementById('player-title').textContent = song.title;
         document.getElementById('player-artist').textContent = song.artist;
         document.getElementById('player-cover-art').src = song.cover;
         
-        // بروزرسانی Hero در صفحه اصلی
         const heroTitle = document.getElementById('hero-title');
         if(heroTitle) {
             heroTitle.textContent = song.title;
@@ -136,6 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function playSong() {
+        if (!audio.src) return;
         isPlaying = true;
         audio.play();
         if (playIcon) playIcon.classList.add('hidden');
@@ -157,7 +165,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ۴. نهایی‌سازی
     // =================================================================
     function initializeUI() {
-        // مدیریت فیلتر هنرمند در بدو ورود به صفحه اصلی
         const filterArtist = localStorage.getItem('groovyFilterArtist');
         if (!isInPagesFolder && filterArtist) {
             const filteredSongs = musicDatabase.filter(s => s.artist === filterArtist);
@@ -170,10 +177,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         renderTopArtists();
-        if(musicDatabase.length > 0) loadSong(0);
+        
+        // We don't call loadSong(0) here anymore so the player stays hidden on start
 
         if(playPauseBtn) playPauseBtn.addEventListener('click', togglePlayPause);
         if(mobilePlayBtn) mobilePlayBtn.addEventListener('click', togglePlayPause);
+
+        // Progress bar click to seek
+        if (progressContainer) {
+            progressContainer.addEventListener('click', (e) => {
+                const width = progressContainer.clientWidth;
+                const clickX = e.offsetX;
+                const duration = audio.duration;
+                audio.currentTime = (clickX / width) * duration;
+            });
+        }
 
         audio.addEventListener('timeupdate', () => {
             const { duration, currentTime } = audio;
@@ -182,9 +200,24 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if(progressBar) progressBar.style.width = `${percent}%`;
                 if(mobileProgressBar) mobileProgressBar.style.width = `${percent}%`;
                 const curTimeEl = document.getElementById('current-time');
+                const totalDurationEl = document.getElementById('total-duration');
                 if(curTimeEl) curTimeEl.textContent = formatTime(currentTime);
+                if(totalDurationEl) totalDurationEl.textContent = formatTime(duration);
             }
         });
+
+        // Listen Now button logic
+        const heroPlayBtn = document.getElementById('hero-play-btn');
+        if (heroPlayBtn) {
+            heroPlayBtn.addEventListener('click', () => {
+                if (musicDatabase.length > 0) {
+                    currentPlaylist = [...musicDatabase];
+                    currentSongIndex = 0;
+                    loadSong(0);
+                    playSong();
+                }
+            });
+        }
     }
 
     function formatTime(secs) {
