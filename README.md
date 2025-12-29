@@ -5,6 +5,10 @@
 [![Version](https://img.shields.io/badge/version-1.0.0-orange.svg)](https://example.com/releases)
 
 A user-friendly music exploration platform designed to help users discover trending hits, browse diverse genres, and manage their listening history.
+## Visit Website
+
+Visit the [Page](https://basevolume.ir/).
+
 ## Tech Stack
 
 The technologies used in BaseVolume have been inferred from the site's structure and functionality, as no explicit details were provided on the website.
@@ -38,8 +42,6 @@ For inquiries or support, reach out via the following (inferred placeholders, as
 - **Email**: support@basevolume.ir
 - **Twitter**: [@basevolume](https://twitter.com/basevolume)
 - **GitHub Issues**: [Open an issue](https://github.com/yourusername/basevolume/issues)
-
-Visit the [Contact Page](https://basevolume.ir/contact) for more options (if available).
 
 ## 📂 Project Structure
 ```text
