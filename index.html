@@ -47,10 +47,10 @@
         
         /* Glassy Notch Styling */
         .glass-notch { 
-            background: rgba(20, 20, 20, 0.7); 
-            backdrop-filter: blur(24px) saturate(180%); 
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            background: rgba(20, 20, 20, 0.75); 
+            backdrop-filter: blur(28px) saturate(180%); 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
         }
         
         /* Premium Shadows & Animations */
@@ -61,11 +61,15 @@
 
         /* Animation for Pop-up */
         #player-bar {
+            /* Center the notch and move it below the screen */
+            left: 50%;
             transform: translate(-50%, 150%);
             opacity: 0;
             pointer-events: none;
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+            transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
         }
+        
+        /* State when active (playing) */
         #player-bar.active {
             transform: translate(-50%, 0);
             opacity: 1;
@@ -261,7 +265,7 @@
             </main>
 
             <!-- Floating Glassy Notch Player (Initially Hidden) -->
-            <div id="player-bar" class="fixed bottom-8 left-1/2 -translate-x-1/2 w-[92%] max-w-5xl glass-notch rounded-[2.5rem] p-4 z-50">
+            <div id="player-bar" class="fixed bottom-8 glass-notch rounded-[2.5rem] p-4 z-50 w-[92%] max-w-5xl">
                 <div class="max-w-screen-2xl mx-auto flex items-center justify-between gap-6 px-2">
                     
                     <!-- Track Info -->
@@ -319,5 +323,27 @@
     <audio id="audio-player"></audio>
     <!-- Script Connection -->
     <script src="script.js" defer></script>
+    
+    <!-- Automatic Player Show Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const player = document.getElementById('audio-player');
+            const bar = document.getElementById('player-bar');
+            
+            if (player && bar) {
+                // When audio source changes or play starts, show the bar
+                player.addEventListener('play', () => {
+                    bar.classList.add('active');
+                });
+                
+                // Also catch 'loadstart' to show it as soon as a song is picked
+                player.addEventListener('loadstart', () => {
+                    if (player.src && !player.src.endsWith('/')) {
+                        bar.classList.add('active');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
